@@ -2,9 +2,9 @@ package ru.vsu.cs.aisd2023.g112.ereshkin_a_v.task02;
 
 import java.util.Iterator;
 
-public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
-	public static class CustomLinkedListException extends Exception {
-		public CustomLinkedListException(String message) {
+public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
+	public static class LinkedListException extends Exception {
+		public LinkedListException(String message) {
 			super(message);
 		}
 	}
@@ -12,16 +12,16 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * "Первая" нода
 	 * */
-	private CustomLinkedListNode<T> head = null;
+	private ListNode<T> head = null;
 	/**
 	 * "Последняя" нода
 	 * */
-	private CustomLinkedListNode<T> tail = null;
+	private ListNode<T> tail = null;
 	private int size = 0;
 
 	// O(1)
 	public void addFirst(T value) {
-		head = new CustomLinkedListNode<T>(value, head);
+		head = new ListNode<T>(value, head);
 		if (size == 0) {
 			tail = head;
 		}
@@ -31,27 +31,28 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 	// O(1)
 	public void addLast(T value) {
 		if (size == 0) {
-			head = tail = new CustomLinkedListNode<>(value);
+			head = tail = new ListNode<>(value);
 		} else {
-			tail.next = new CustomLinkedListNode<>(value);
+			tail.next = new ListNode<>(value);
 			tail = tail.next;
 		}
 		size++;
 	}
-	public void addLast(T... values){
+	@SafeVarargs
+	public final void addLast(T... values){
 		for (T value : values) {
 			addLast(value);
 		}
 	}
-	private void checkEmptyError() throws CustomLinkedListException {
+	private void checkEmptyError() throws LinkedListException {
 		if (size == 0) {
-			throw new CustomLinkedListException("Empty list");
+			throw new LinkedListException("Empty list");
 		}
 	}
 
 	// O(n)
-	public CustomLinkedListNode<T> getNode(int index) {
-		CustomLinkedListNode<T> curr = head;
+	public ListNode<T> getNode(int index) {
+		ListNode<T> curr = head;
 		for (int i = 0; i < index; i++) {
 			curr = curr.next;
 		}
@@ -59,7 +60,7 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 	}
 
 	// O(1)
-	public void removeFirst() throws CustomLinkedListException {
+	public void removeFirst() throws LinkedListException {
 		checkEmptyError();
 		head = head.next;
 		if (size == 1) {
@@ -69,7 +70,7 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 	}
 
 	// O(n)
-	public void removeLast() throws CustomLinkedListException {
+	public void removeLast() throws LinkedListException {
 		checkEmptyError();
 		if (size == 1) {
 			head = tail = null;
@@ -81,15 +82,15 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 	}
 
 	// O(n)
-	public void remove(int index) throws CustomLinkedListException {
+	public void remove(int index) throws LinkedListException {
 		checkEmptyError();
 		if (index < 0 || index >= size) {
-			throw new CustomLinkedListException("Array out of bounds exception");
+			throw new LinkedListException("Array out of bounds exception");
 		}
 		if (index == 0) {
 			removeFirst();
 		} else {
-			CustomLinkedListNode<T> prev = getNode(index - 1);
+			ListNode<T> prev = getNode(index - 1);
 			prev.next = prev.next.next;
 			if (prev.next == null) {
 				tail = prev;
@@ -107,20 +108,20 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 	public T get(int index) {
 		try {
 			checkEmptyError();
-		} catch (CustomLinkedListException e){
+		} catch (LinkedListException e){
 			return null;
 		}
 		return getNode(index).value;
 	}
 
 	// O(1)
-	public T getFirst() throws CustomLinkedListException {
+	public T getFirst() throws LinkedListException {
 		checkEmptyError();
 		return head.value;
 	}
 
 	// O(1)
-	public T getLast() throws CustomLinkedListException {
+	public T getLast() throws LinkedListException {
 		checkEmptyError();
 		return tail.value;
 	}
@@ -130,39 +131,39 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 		if (head == null || head == tail) {
 			return;
 		}
-		CustomLinkedListNode<T> new_head = null;
-		CustomLinkedListNode<T> move_node;
-		CustomLinkedListNode<T> prev;
+		ListNode<T> newHead = null;
+		ListNode<T> moveNode;
+		ListNode<T> prev;
 		while (head != null) {
 			prev = null;
-			CustomLinkedListNode<T> current = head;
-			move_node = head;
+			ListNode<T> current = head;
+			moveNode = head;
 			while (current != null) {
 				//Когда значение текущей ноды больше значения предыдущей ноды
-				if (current.next != null && current.next.value.compareTo(move_node.value) > 0) {
+				if (current.next != null && current.next.value.compareTo(moveNode.value) > 0) {
 					// Меняем ноды
-					move_node = current.next;
+					moveNode = current.next;
 					prev = current;
 				}
 				// Делаем текущей нодой следующую
 				current = current.next;
 			}
-			if (move_node == head) {
+			if (moveNode == head) {
 				head = head.next;
 			}
 			if (prev != null) {
-				prev.next = move_node.next;
+				prev.next = moveNode.next;
 			}
-			move_node.next = new_head;
-			new_head = move_node;
+			moveNode.next = newHead;
+			newHead = moveNode;
 		}
 		//Ставим вместо head новый элемент
-		head = new_head;
+		head = newHead;
 	}
 	@Override
 	public Iterator<T> iterator() {
-		class SimpleLinkedListIterator implements Iterator<T> {
-			CustomLinkedListNode<T> curr = head;
+		class LinkedListIterator implements Iterator<T> {
+			ListNode<T> curr = head;
 
 			@Override
 			public boolean hasNext() {
@@ -176,7 +177,7 @@ public class CustomLinkedList<T extends Comparable<T>> implements Iterable<T> {
 			}
 		}
 
-		return new SimpleLinkedListIterator();
+		return new LinkedListIterator();
 	}
 
 	@Override
