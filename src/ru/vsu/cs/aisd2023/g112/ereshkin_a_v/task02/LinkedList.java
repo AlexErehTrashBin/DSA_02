@@ -1,34 +1,48 @@
 package ru.vsu.cs.aisd2023.g112.ereshkin_a_v.task02;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
-	public static class LinkedListException extends Exception {
-		public LinkedListException(String message) {
-			super(message);
-		}
-	}
-
 	/**
 	 * "Первая" нода
-	 * */
+	 */
 	private ListNode<T> head = null;
 	/**
 	 * "Последняя" нода
-	 * */
+	 */
 	private ListNode<T> tail = null;
+	/**
+	* Поле для размера списка
+	* */
 	private int size = 0;
 
-	// O(1)
+	/**
+	 * Создаёт пустой связный список.
+	 * */
+	public LinkedList() {
+	}
+
+	/**
+	 * Добавить элемент в начало списка.
+	 * <br>
+	 * Временная сложность - O(1).
+	 * @param value элемент, который нужно добавить.
+	 * */
 	public void addFirst(T value) {
-		head = new ListNode<T>(value, head);
+		head = new ListNode<>(value, head);
 		if (size == 0) {
 			tail = head;
 		}
 		size++;
 	}
 
-	// O(1)
+	/**
+	 * Добавить элемент в конец списка.
+	 * <br>
+	 * Временная сложность - O(1).
+	 * @param value элемент, который нужно добавить.
+	 * */
 	public void addLast(T value) {
 		if (size == 0) {
 			head = tail = new ListNode<>(value);
@@ -38,20 +52,34 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 		}
 		size++;
 	}
+
+	/**
+	 * Добавить несколько элементов в конец списка.
+	 * <br>
+	 * Временная сложность - O(1).
+	 * @param values элементы, которые нужно добавить.
+	 * */
 	@SafeVarargs
-	public final void addLast(T... values){
+	public final void addLast(T... values) {
 		for (T value : values) {
 			addLast(value);
 		}
 	}
+
 	private void checkEmptyError() throws LinkedListException {
 		if (size == 0) {
 			throw new LinkedListException("Empty list");
 		}
 	}
 
-	// O(n)
-	public ListNode<T> getNode(int index) {
+	/**
+	 * Метод, который получает ноду с индексом index.
+	 * <br>
+	 * Временная сложность - O(N)
+	 * @param index индекс ноды, которую надо получить.
+	 * @return нода по индексу index.
+	 * */
+	private ListNode<T> getNode(int index) {
 		ListNode<T> curr = head;
 		for (int i = 0; i < index; i++) {
 			curr = curr.next;
@@ -59,7 +87,12 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 		return curr;
 	}
 
-	// O(1)
+	/**
+	 * Метод, который удаляет первый элемент.
+	 * <br>
+	 * Временная сложность - O(1)
+	 * @throws LinkedListException если список пустой.
+	 * */
 	public void removeFirst() throws LinkedListException {
 		checkEmptyError();
 		head = head.next;
@@ -69,7 +102,12 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 		size--;
 	}
 
-	// O(n)
+	/**
+	 * Метод, который удаляет последний элемент.
+	 * <br>
+	 * Временная сложность - O(N)
+	 * @throws LinkedListException если список пустой.
+	 * */
 	public void removeLast() throws LinkedListException {
 		checkEmptyError();
 		if (size == 1) {
@@ -81,7 +119,13 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 		size--;
 	}
 
-	// O(n)
+	/**
+	 * Метод, который удаляет элемент с индексом index.
+	 * <br>
+	 * Временная сложность - O(N)
+	 * @param index индекс, по которому надо удалить элемент.
+	 * @throws LinkedListException если index находится за пределом допустимых значений индекса списка.
+	 * */
 	public void remove(int index) throws LinkedListException {
 		checkEmptyError();
 		if (index < 0 || index >= size) {
@@ -99,67 +143,100 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 		}
 	}
 
-	// O(1)
+	/**
+	 * Метод получения размера списка
+	 * <br>
+	 * Временная сложность - O(1)
+	 * @return размер списка
+	 * */
 	public int size() {
 		return size;
 	}
 
-	// O(n)
+	/**
+	 * Получить элемент списка по индексу
+	 * <br>
+	 * Временная сложность - O(N)
+	 * @param index индекс, по которому надо вернуть элемент.
+	 * @return элемент списка по индексу index, если список не пустой.
+	 * Если список пустой - возвращается null.
+	 * */
 	public T get(int index) {
 		try {
 			checkEmptyError();
-		} catch (LinkedListException e){
+		} catch (LinkedListException e) {
 			return null;
 		}
 		return getNode(index).value;
 	}
 
-	// O(1)
+	/**
+	 * Получить первый элемент списка.
+	 * <br>
+	 * Временная сложность - O(1)
+	 * @return первый элемент списка.
+	 * @throws LinkedListException если список пустой.
+	 * */
 	public T getFirst() throws LinkedListException {
 		checkEmptyError();
 		return head.value;
 	}
 
-	// O(1)
+	/**
+	 * Получить последний элемент списка.
+	 * <br>
+	 * Временная сложность - O(1).
+	 * @return последний элемент списка.
+	 * @throws LinkedListException если список пустой.
+	 * */
 	public T getLast() throws LinkedListException {
 		checkEmptyError();
 		return tail.value;
 	}
 
-	//perform bubble sort in single linked list
-	public void bubbleSort() {
-		if (head == null || head == tail) {
-			return;
-		}
-		ListNode<T> newHead = null;
-		ListNode<T> moveNode;
-		ListNode<T> prev;
-		while (head != null) {
-			prev = null;
-			ListNode<T> current = head;
-			moveNode = head;
-			while (current != null) {
-				//Когда значение текущей ноды больше значения предыдущей ноды
-				if (current.next != null && current.next.value.compareTo(moveNode.value) > 0) {
-					// Меняем ноды
-					moveNode = current.next;
-					prev = current;
+	/**
+	 * Отсортировать список методом пузырьковой сортировки.
+	 * <br>
+	 * Временная сложность - O(N<sup>2</sup>)
+	 * @param comparator компаратор, который определяет критерий для установления порядка итогового списка.
+	 * */
+	public void bubbleSort(Comparator<T> comparator) {
+		if (size <= 1) return;
+		// Цикл, проходящийся по каждому элементу списка
+		for (int i = 0; i < size; ++i) {
+			ListNode<T> currentNode;
+			ListNode<T> previousNode;
+			// Устанавливаем текущую и предыдущую ей ноду на начало списка (обе указывают на head)
+			currentNode = previousNode = head;
+			// Для оставшихся элементов в списке - проверяем, и если требуется - обмениваем их местами.
+			while (currentNode.next != null) {
+				// Проверяем компаратором текущую и следующую ноды, следует ли менять их местами:
+				if (comparator.compare(currentNode.value, currentNode.next.value) > 0) {
+					ListNode<T> temporaryNode = currentNode.next;
+					/// Меняем ссылки для текущего и следующего за текущим нод списка.
+					currentNode.next = currentNode.next.next;
+					temporaryNode.next = currentNode;
+					/// Устанавливаем указатели для элементов, которые перед сравниваемыми
+					boolean isCurrentNodeHead = currentNode == head;
+					if (isCurrentNodeHead){
+						/// СИТУАЦИЯ ДЛЯ САМОГО ПЕРВОГО ЭЛЕМЕНТА:
+						// Ставим вместо головы временную ноду
+						head = temporaryNode;
+					} else {
+						/// СИТУАЦИЯ ДЛЯ ОСТАЛЬНЫХ ЭЛЕМЕНТОВ:
+						// Устанавливаем в следующую после предыдущей ноды временную ноду
+						previousNode.next = temporaryNode;
+					}
+					// Обновляем текущую ноду, чтобы она стала временной, т.к. позиции изменились
+					currentNode = temporaryNode;
 				}
-				// Делаем текущей нодой следующую
-				current = current.next;
+				/// Двигаемся вперёд (ставим указатели на следующие за ними элементы)
+				previousNode = currentNode;
+				currentNode = currentNode.next;
 			}
-			if (moveNode == head) {
-				head = head.next;
-			}
-			if (prev != null) {
-				prev.next = moveNode.next;
-			}
-			moveNode.next = newHead;
-			newHead = moveNode;
 		}
-		//Ставим вместо head новый элемент
-		head = newHead;
 	}
+
 	@Override
 	public Iterator<T> iterator() {
 		class LinkedListIterator implements Iterator<T> {
@@ -169,6 +246,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 			public boolean hasNext() {
 				return curr != null;
 			}
+
 			@Override
 			public T next() {
 				T value = curr.value;
@@ -187,5 +265,29 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 			sb.append(i > 0 ? ", " : "").append(get(i));
 		}
 		return sb.toString();
+	}
+
+	public static class LinkedListException extends Exception {
+		public LinkedListException(String message) {
+			super(message);
+		}
+	}
+
+	/**
+	 * Элемент связного списка, который содержит данные (value) и указатель на следующий узел (next).
+	 * @param <E> тип данных, хранимый в данном узле списка.
+	 */
+	protected class ListNode<E> {
+		public E value;
+		public ListNode<E> next;
+
+		public ListNode(E value, ListNode<E> next) {
+			this.value = value;
+			this.next = next;
+		}
+
+		public ListNode(E value) {
+			this(value, null);
+		}
 	}
 }
