@@ -26,7 +26,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Добавить элемент в начало списка.
 	 * <br>
-	 * Временная сложность - O(1).
+	 * Временная сложность - <b>O(1)</b>.
 	 * @param value элемент, который нужно добавить.
 	 * */
 	public void addFirst(T value) {
@@ -40,7 +40,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Добавить элемент в конец списка.
 	 * <br>
-	 * Временная сложность - O(1).
+	 * Временная сложность - <b>O(1)</b>.
 	 * @param value элемент, который нужно добавить.
 	 * */
 	public void addLast(T value) {
@@ -56,7 +56,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Добавить несколько элементов в конец списка.
 	 * <br>
-	 * Временная сложность - O(1).
+	 * Временная сложность - <b>O(N)</b>.
 	 * @param values элементы, которые нужно добавить.
 	 * */
 	@SafeVarargs
@@ -75,7 +75,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Метод, который получает ноду с индексом index.
 	 * <br>
-	 * Временная сложность - O(N)
+	 * Временная сложность - <b>O(N)</b>.
 	 * @param index индекс ноды, которую надо получить.
 	 * @return нода по индексу index.
 	 * */
@@ -90,7 +90,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Метод, который удаляет первый элемент.
 	 * <br>
-	 * Временная сложность - O(1)
+	 * Временная сложность - <b>O(1)</b>.
 	 * @throws LinkedListException если список пустой.
 	 * */
 	public void removeFirst() throws LinkedListException {
@@ -105,7 +105,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Метод, который удаляет последний элемент.
 	 * <br>
-	 * Временная сложность - O(N)
+	 * Временная сложность - <b>O(N).</b>
 	 * @throws LinkedListException если список пустой.
 	 * */
 	public void removeLast() throws LinkedListException {
@@ -122,7 +122,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Метод, который удаляет элемент с индексом index.
 	 * <br>
-	 * Временная сложность - O(N)
+	 * Временная сложность - <b>O(N).</b>
 	 * @param index индекс, по которому надо удалить элемент.
 	 * @throws LinkedListException если index находится за пределом допустимых значений индекса списка.
 	 * */
@@ -156,7 +156,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Получить элемент списка по индексу
 	 * <br>
-	 * Временная сложность - O(N)
+	 * Временная сложность - <b>O(N).</b>
 	 * @param index индекс, по которому надо вернуть элемент.
 	 * @return элемент списка по индексу index, если список не пустой.
 	 * Если список пустой - возвращается null.
@@ -173,7 +173,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Получить первый элемент списка.
 	 * <br>
-	 * Временная сложность - O(1)
+	 * Временная сложность - <b>O(1)</b>
 	 * @return первый элемент списка.
 	 * @throws LinkedListException если список пустой.
 	 * */
@@ -185,7 +185,7 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Получить последний элемент списка.
 	 * <br>
-	 * Временная сложность - O(1).
+	 * Временная сложность - <b>O(1)</b>.
 	 * @return последний элемент списка.
 	 * @throws LinkedListException если список пустой.
 	 * */
@@ -197,17 +197,16 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 	/**
 	 * Отсортировать список методом пузырьковой сортировки.
 	 * <br>
-	 * Временная сложность - O(N<sup>2</sup>)
+	 * Временная сложность - <b>O(N<sup>2</sup>)</b>
 	 * @param comparator компаратор, который определяет критерий для установления порядка итогового списка.
 	 * */
 	public void bubbleSort(Comparator<T> comparator) {
 		if (size <= 1) return;
 		// Цикл, проходящийся по каждому элементу списка
 		for (int i = 0; i < size; ++i) {
-			ListNode<T> currentNode;
-			ListNode<T> previousNode;
-			// Устанавливаем текущую и предыдущую ей ноду на начало списка (обе указывают на head)
-			currentNode = previousNode = head;
+			ListNode<T> previousNode = head;
+			// Устанавливаем текущую и предыдущую ей ноду на начало списка (head)
+			ListNode<T> currentNode = head;
 			// Для оставшихся элементов в списке - проверяем, и если требуется - обмениваем их местами.
 			while (currentNode.next != null) {
 				// Проверяем компаратором текущую и следующую ноды, следует ли менять их местами:
